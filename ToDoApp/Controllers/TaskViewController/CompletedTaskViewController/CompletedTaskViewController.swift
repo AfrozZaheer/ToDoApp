@@ -8,11 +8,11 @@
 
 import UIKit
 
-class CompletedTaskViewController: BaseViewController {
+class CompletedTaskViewController: TaskViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        // Do any additional setup after loading the view.
+        content = taskManager.completedTasks
     }
 }
 

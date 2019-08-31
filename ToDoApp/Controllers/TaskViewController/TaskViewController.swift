@@ -2,16 +2,17 @@
 //  BaseViewController.swift
 //  ToDoApp
 //
-//  Created by Khawar Shahzad on 31/08/2019.
+//  Created by Afroz Zaheer on 31/08/2019.
 //  Copyright © 2019 AfrozZaheer. All rights reserved.
 //
 
 import UIKit
 
-class BaseViewController: UIViewController {
+class TaskViewController: UIViewController { // Generalization of task
 
     @IBOutlet weak var tableView: UITableView!
     internal var content = [BaseRowModel<Task>]()
+    let taskManager = TaskManager.sharedManager
     override func viewDidLoad() {
         super.viewDidLoad()
         registerNibCells()
@@ -22,7 +23,7 @@ class BaseViewController: UIViewController {
     }
 }
 
-extension BaseViewController: UITableViewDataSource {
+extension TaskViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return content.count
     }

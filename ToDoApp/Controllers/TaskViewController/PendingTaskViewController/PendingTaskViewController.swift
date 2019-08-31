@@ -2,16 +2,17 @@
 //  PendingTaskViewController.swift
 //  ToDoApp
 //
-//  Created by Khawar Shahzad on 31/08/2019.
+//  Created by Afroz Zaheer on 31/08/2019.
 //  Copyright © 2019 AfrozZaheer. All rights reserved.
 //
 
 import UIKit
 
-class PendingTaskViewController: BaseViewController {
+class PendingTaskViewController: TaskViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        content = taskManager.pendingTasks
     }
     
     
@@ -57,8 +58,8 @@ extension PendingTaskViewController {
     }
     
     fileprivate func createNewTask(name: String) {
-        let task = Task()
-        task.name = name
+        let task = Task(name: name, type: .Pending)
+        
         let rowModel = BaseRowModel<Task>()
         rowModel.rowCellIdentifier = "TaskTableViewCell"
         rowModel.rowValue = task
