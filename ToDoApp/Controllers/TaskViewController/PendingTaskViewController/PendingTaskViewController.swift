@@ -57,6 +57,9 @@ extension PendingTaskViewController {
         rowModel.rowCellIdentifier = "TaskTableViewCell"
         rowModel.rowValue = task
         taskManager.allTasks.append(rowModel)
-        tableView.reloadData()
+        let index = IndexPath(row: taskManager.allTasks.count - 1, section: 0)
+        tableView.beginUpdates()
+        tableView.insertRows(at: [index], with: .left)
+        tableView.endUpdates()
     }
 }

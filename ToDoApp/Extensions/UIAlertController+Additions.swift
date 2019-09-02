@@ -14,9 +14,11 @@ fileprivate let rootViewController = UIViewController.topViewController()!
 extension UIAlertController {
     
     class func showAlert(title: String?, message: String?, parentVC: UIViewController = rootViewController) {
-        let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
-        alert.addAction(UIAlertAction(title: Constants.buttonOK, style: .default))
-        parentVC.present(alert, animated: true, completion: nil)
+        DispatchQueue.main.async {
+            let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
+            alert.addAction(UIAlertAction(title: Constants.buttonOK, style: .default))
+            parentVC.present(alert, animated: true, completion: nil)
+        }
     
     }
     
