@@ -13,8 +13,22 @@ class PendingTaskViewController: TaskViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         content = taskManager.pendingTasks
+        NotificationCenter.default.addObserver(forName: .taskArrayUpdated, object: nil, queue: nil) {[weak self] (notification) in
+            self?.updateTableViewData()
+        }
+        updateTableViewData()
     }
     
+    override func reloadTableView() {
+        content = taskManager.pendingTasks
+        super.reloadTableView()
+    }
+    
+    // MARK: - Utility Methods
+    
+    fileprivate func updateTableViewData() {
+        content = taskManager.pendingTasks
+    }
     
     // MARK: - IBAction
 
@@ -27,35 +41,14 @@ class PendingTaskViewController: TaskViewController {
 
 extension PendingTaskViewController {
     fileprivate func presentNewTaskAlert() {
-        let alert = UIAlertController(title: "", message: "Task Information", preferredStyle: .alert)
-        
-        alert.addTextField(configurationHandler: {(_ textField: UITextField) -> Void in
-            textField.placeholder = "Enter Task Name"
-            textField.autocapitalizationType = .sentences
-        })
-        
-        let createAction = UIAlertAction(title: buttonCreate, style: .default, handler: {(_ action: UIAlertAction) -> Void in
-            
-            let textfields = alert.textFields
-            let taskfield: UITextField = textfields![0]
-            
-            if taskfield.text!.isEmpty {
-                Utility.showAlert("", message: "Please enter task name", onController: self)
-            }
-            else {
-                self.createNewTask(name: taskfield.text!)
-            }
-        })
-        
-        let cancelAction = UIAlertAction(title: buttonCancel, style: .cancel, handler: {(_ action: UIAlertAction) -> Void in
-        })
-        
-        alert.addAction(createAction)
-        alert.addAction(cancelAction)
-        
-        present(alert, animated: true, completion: nil)
-
+        UIAlertController.showAlertWithTextFieldToEnterTask(parentVC: self, success: {[weak self] (title) in
+            guard let `self` = self else {return}
+            self.createNewTask(name: title)
+        }) {
+            UIAlertController.showAlert(title: "", message: "Please enter task name", parentVC: self)
+        }
     }
+    
     
     fileprivate func createNewTask(name: String) {
         let task = Task(name: name, type: .Pending)
@@ -63,7 +56,7 @@ extension PendingTaskViewController {
         let rowModel = BaseRowModel<Task>()
         rowModel.rowCellIdentifier = "TaskTableViewCell"
         rowModel.rowValue = task
-        content.append(rowModel)
+        taskManager.allTasks.append(rowModel)
         tableView.reloadData()
     }
 }

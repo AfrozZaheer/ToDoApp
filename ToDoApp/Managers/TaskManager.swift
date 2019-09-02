@@ -11,7 +11,11 @@ import UIKit
 class TaskManager: NSObject {
     static let sharedManager = TaskManager()
     
-    var allTasks = [BaseRowModel<Task>]()
+    var allTasks = [BaseRowModel<Task>]() {
+        didSet {
+            NotificationCenter.default.post(name: .taskArrayUpdated, object: nil)
+        }
+    }
     var pendingTasks: [BaseRowModel<Task>] {
         return self.filterWithTask(type: .Pending)
     }

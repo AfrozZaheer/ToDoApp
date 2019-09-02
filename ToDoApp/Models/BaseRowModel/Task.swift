@@ -12,10 +12,12 @@ class Task {
     
     var name: String?
     var type: TaskType
+    var taskIdentifier: Date!
     
     init(name: String, type: TaskType) {
         self.name = name
         self.type = type
+        taskIdentifier = Date.init()
     }
     
 }

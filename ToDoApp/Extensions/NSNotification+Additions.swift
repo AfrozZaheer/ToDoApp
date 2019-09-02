@@ -11,4 +11,6 @@ import UIKit
 extension Notification.Name {
     
     static let taskArrayUpdated = Notification.Name("TaskArrayUpdated")
+    static let taskTypeChange = Notification.Name("TaskTypeChange")
+    
 }
