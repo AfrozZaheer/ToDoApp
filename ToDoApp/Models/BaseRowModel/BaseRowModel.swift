@@ -10,8 +10,6 @@ import UIKit
 
 class BaseRowModel<T>: NSObject {
     // Row Item
-    var rowTag: Int = 0
     var rowCellIdentifier = ""
     var rowValue: T?
-    var rowHeight: CGFloat = UITableView.automaticDimension
 }

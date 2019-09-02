@@ -19,14 +19,14 @@ class PendingTaskViewController: TaskViewController {
         updateTableViewData()
     }
     
-    override func reloadTableView() {
+    override func reloadTableView() { // called when data in main array type changes
         content = taskManager.pendingTasks
         super.reloadTableView()
     }
     
     // MARK: - Utility Methods
     
-    fileprivate func updateTableViewData() {
+    fileprivate func updateTableViewData() { // called upon when data in main array added or deleted
         content = taskManager.pendingTasks
     }
     
@@ -42,7 +42,7 @@ class PendingTaskViewController: TaskViewController {
 extension PendingTaskViewController {
     fileprivate func presentNewTaskAlert() {
         UIAlertController.showAlertWithTextFieldToEnterTask(parentVC: self, success: {[weak self] (title) in
-            guard let `self` = self else {return}
+            guard let `self` = self else {return} // creating self name local variable and make it in guard statement
             self.createNewTask(name: title)
         }) {
             UIAlertController.showAlert(title: "", message: "Please enter task name", parentVC: self)
@@ -50,7 +50,7 @@ extension PendingTaskViewController {
     }
     
     
-    fileprivate func createNewTask(name: String) {
+    fileprivate func createNewTask(name: String) { // create wrapper around data for general use for better understanding and reusability. this approch can be used on data from Api for cleaner code
         let task = Task(name: name, type: .Pending)
         
         let rowModel = BaseRowModel<Task>()

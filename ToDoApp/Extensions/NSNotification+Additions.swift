@@ -9,7 +9,7 @@
 import UIKit
 
 extension Notification.Name {
-    
+    // retro active approch for more readable code
     static let taskArrayUpdated = Notification.Name("TaskArrayUpdated")
     static let taskTypeChange = Notification.Name("TaskTypeChange")
     

@@ -20,7 +20,7 @@ class TaskTableViewCell: BaseTableViewCell<Task> {
         super.setSelected(selected, animated: animated)
     }
     
-    override func updateCell(data: Task?) {
+    override func updateCell(data: Task?) { // Cell content updated with Task data
         if let task = data {
             lblTaskTitle.text = task.name
         }

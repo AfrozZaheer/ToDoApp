@@ -8,23 +8,23 @@
 
 import UIKit
 
-class TaskManager: NSObject {
+class TaskManager: NSObject { // A Singelton class responsible of filtering and containg task arrays.
     static let sharedManager = TaskManager()
     
     var allTasks = [BaseRowModel<Task>]() {
         didSet {
-            NotificationCenter.default.post(name: .taskArrayUpdated, object: nil)
+            NotificationCenter.default.post(name: .taskArrayUpdated, object: nil) // notify the controllers about the changed in main task array
         }
     }
     var pendingTasks: [BaseRowModel<Task>] {
-        return self.filterWithTask(type: .Pending)
+        return self.filterWithTask(type: .Pending) // filter main array for pending tasks
     }
     
     var completedTasks: [BaseRowModel<Task>] {
         return self.filterWithTask(type: .Done)
     }
 
-    private override init() {
+    private override init() { // privite init so no new manager class can be created. 
         super.init()
     }
     
