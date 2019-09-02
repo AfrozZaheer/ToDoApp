@@ -50,7 +50,7 @@ extension PendingTaskViewController {
     }
     
     
-    fileprivate func createNewTask(name: String) { // create wrapper around data for general use for better understanding and reusability. this approch can be used on data from Api for cleaner code
+    func createNewTask(name: String) { // create wrapper around data for general use for better understanding and reusability. this approch can be used on data from Api for cleaner code
         let task = Task(name: name, type: .Pending)
         
         let rowModel = BaseRowModel<Task>()

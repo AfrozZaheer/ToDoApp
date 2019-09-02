@@ -10,9 +10,16 @@ import UIKit
 
 class TaskViewController: UIViewController { // Generalization of task controller
 
+    //MARK: IBOutlet
+
     @IBOutlet weak var tableView: UITableView!
+    //MARK: Properties
+
     internal var content = [BaseRowModel<Task>]() // Signle array containg data for tableview internal so can be protect while accessable to child class
     let taskManager = TaskManager.sharedManager // manager which manages the task
+
+    //MARK: LifeCycle of controller
+
     override func viewDidLoad() {
         super.viewDidLoad()
         registerNibCells()
@@ -27,13 +34,34 @@ class TaskViewController: UIViewController { // Generalization of task controlle
     deinit {
         NotificationCenter.default.removeObserver(self)
     }
-    
+
+    //MARK: Utility functions
+
     internal func reloadTableView() {tableView.reloadData()}
     
     func registerNibCells() {
         tableView.register(UINib(nibName: "TaskTableViewCell", bundle: nil), forCellReuseIdentifier: "TaskTableViewCell") // signle cell used on multiple controllers so make Nib to reduce multiplication
     }
+    
+    func changeStatusAndNotify(rowModel: BaseRowModel<Task>) {
+        taskManager.allTasks.forEach { (model) in
+            if let task = rowModel.rowValue, let taskToCompare = model.rowValue {
+                if task.taskIdentifier == taskToCompare.taskIdentifier { // changing the type of task
+                    if task.type == .Done {
+                        task.type = .Pending
+                        UIAlertController.showAlert(title: nil, message: Constants.messageTaskPending)
+                    } else {
+                        task.type = .Done
+                        UIAlertController.showAlert(title: nil, message: Constants.messageTaskCompleted)
+                    }
+                }
+            }
+            NotificationCenter.default.post(name: .taskTypeChange, object: nil) // after change notify the controller to update its data  source...
+        }
+    }
 }
+
+//MARK: UITableViewDataSource
 
 extension TaskViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -51,6 +79,8 @@ extension TaskViewController: UITableViewDataSource {
     }
     
 }
+
+//MARK: UITableViewDelegate
 
 extension TaskViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
@@ -77,19 +107,7 @@ extension TaskViewController: UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let rowModel = content[indexPath.row]
-        taskManager.allTasks.forEach { (model) in
-            if let task = rowModel.rowValue, let taskToCompare = model.rowValue {
-                if task.taskIdentifier == taskToCompare.taskIdentifier { // changing the type of task
-                    if task.type == .Done {
-                        task.type = .Pending
-                        UIAlertController.showAlert(title: nil, message: Constants.messageTaskPending)
-                    } else {
-                        task.type = .Done
-                        UIAlertController.showAlert(title: nil, message: Constants.messageTaskCompleted)
-                    }
-                }
-            }
-            NotificationCenter.default.post(name: .taskTypeChange, object: nil) // after change notify the controller to update its data  source...
-        }
+        changeStatusAndNotify(rowModel: rowModel)
     }
+    
 }
